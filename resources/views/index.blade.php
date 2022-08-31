@@ -44,24 +44,30 @@
             </div>
           </div>
 
-          @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+          <div class="container mt-20">
+            <div class="row">
+                <div class="col-sm-12">
+                    @if ($errors->any())
+                      <div class="alert alert-danger">
+                          <ul>
+                              @foreach ($errors->all() as $error)
+                                  <li>{{ $error }}</li>
+                              @endforeach
+                          </ul>
+                      </div>
+                    @endif
+
+                  @if(session()->has('message'))
+
+                    <div class="alert alert-{{session('message_type')}} alert-dismissible fade show" role="alert">
+                        <strong>{{session('message')}}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                  @endif
+                </div>
             </div>
-          @endif
-
-        @if(session()->has('message'))
-
-          <div class="alert alert-{{session('message_type')}} alert-dismissible fade show" role="alert">
-              <strong>{{session('message')}}</strong>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-
-        @endif
 
           <div class="container mt-20">
             <div class="row">
@@ -69,20 +75,20 @@
                     <form class="row g-3" method="post" action="{{url('save')}}">
                         @csrf
                         <div class="col-md-6">
-                          <label for="usia_kematian" class="form-label"><b>Person A:</b> Age of death </label>
-                          <input type="number" class="form-control" id="usia_kematian" name="usia_kematian" required>
+                          <label for="usia_kematian_a" class="form-label"><b>Person A:</b> Age of death </label>
+                          <input type="number" class="form-control" id="usia_kematian_a" name="usia_kematian_a" required>
                         </div>
                         <div class="col-md-6">
-                          <label for="tahun_kematian" class="form-label"><b>Person A:</b> Year of Death</label>
-                          <input type="number" class="form-control" id="tahun_kematian" name="tahun_kematian" required>
+                          <label for="tahun_kematian_a" class="form-label"><b>Person A:</b> Year of Death</label>
+                          <input type="number" class="form-control" id="tahun_kematian_a" name="tahun_kematian_a" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="usia_kematian" class="form-label"><b>Person B:</b> Age of death </label>
-                            <input type="number" class="form-control" id="usia_kematian" name="usia_kematian" required>
+                            <label for="usia_kematian_b" class="form-label"><b>Person B:</b> Age of death </label>
+                            <input type="number" class="form-control" id="usia_kematian_b" name="usia_kematian_b" required>
                           </div>
                           <div class="col-md-6">
-                            <label for="tahun_kematian" class="form-label"><b>Person B:</b> Year of Death</label>
-                            <input type="number" class="form-control" id="tahun_kematian" name="tahun_kematian" required>
+                            <label for="tahun_kematian_b" class="form-label"><b>Person B:</b> Year of Death</label>
+                            <input type="number" class="form-control" id="tahun_kematian_b" name="tahun_kematian_b" required>
                           </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary">Check Result</button>
@@ -95,6 +101,7 @@
           <div class="container mt-20">
             <div class="row">
                 <div class="col-sm-12">
+                  @foreach($row as $key)
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -110,17 +117,86 @@
                               </thead>
                               <tbody>
                                 <tr>
-                                  <th scope="row">1</th>
-                                  <td>Mark</td>
-                                  <td>Otto</td>
-                                  <td>Mark</td>
-                                  <td>Otto</td>
-                                  <td>@mdo</td>
-                                  <td><a href="" class="btn btn-sm btn-primary">Edit</a></td>
+                                  <th scope="row">#</th>
+                                  <td>{{$key->usia_kematian_a}}</td>
+                                  <td>{{$key->tahun_kematian_a}}</td>
+                                  <td>{{$key->usia_kematian_b}}</td>
+                                  <td>{{$key->tahun_kematian_b}}</td>
+                                  <td>{{$key->result}}</td>
+                                  <td>
+                                    <a href="{{url('delete/'.$key->id)}}" class="btn btn-sm btn-danger">delete</a>
+                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                      Edit
+                                    </button>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><b>Given</b></li>
+                                        <li class="list-group-item">Person A: Age of death = {{$key->usia_kematian_a}}, Year of Death = {{$key->tahun_kematian_a}} </li>
+                                        <li class="list-group-item">Person B: Age of death = {{$key->usia_kematian_b}}, Year of Death = {{$key->tahun_kematian_b}} </li>
+                                        <li class="list-group-item"><b>Answer:</b></li>
+                                        <li class="list-group-item">Person A born on Year = {{$key->tahun_kematian_a}} – {{$key->usia_kematian_a}} = {{Helper::Un($key->usia_kematian_a,$key->tahun_kematian_a)['tahun']}}, number of people killed on year {{Helper::Un($key->usia_kematian_a,$key->tahun_kematian_a)['tahun']}} is {{Helper::Un($key->usia_kematian_a,$key->tahun_kematian_a)['kematian']}}. </li>
+                                        <li class="list-group-item">Person B born on Year = {{$key->tahun_kematian_b}} – {{$key->usia_kematian_b}} = {{Helper::Un($key->usia_kematian_b,$key->tahun_kematian_b)['tahun']}}, number of people killed on year {{Helper::Un($key->usia_kematian_b,$key->tahun_kematian_b)['tahun']}} is {{Helper::Un($key->usia_kematian_b,$key->tahun_kematian_b)['kematian']}}. </li>
+                                        <li class="list-group-item"><b>Result</b></li>
+                                        @if($key->result == -1)
+                                          <li class="list-group-item">
+                                            (i.e. negative age, person who born before the witch took control) the program return {{$key->result}}
+                                          </li>
+                                        @else
+                                          <li class="list-group-item">So the average is ( {{Helper::Un($key->usia_kematian_a,$key->tahun_kematian_a)['kematian']}} + {{Helper::Un($key->usia_kematian_b,$key->tahun_kematian_b)['kematian']}} )/2 = {{$key->result}}</li>
+                                        @endif
+                                      </ul>
+                                    </div>
+                                  </div>
                                 </tr>
                               </tbody>
                         </table>
                     </div>
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Data Witch Saga</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form class="row g-3" method="post" action="{{url('update')}}">
+                          <div class="modal-body">
+                            
+                              @csrf
+                              <input type="hidden" name="id" value="{{$key->id}}">
+                              <div class="col-sm-12">
+                                <label for="usia_kematian_a" class="form-label"><b>Person A:</b> Age of death </label>
+                                <input type="number" class="form-control" value="{{$key->usia_kematian_a}}" id="usia_kematian_a" name="usia_kematian_a" required>
+                              </div>
+                              <div class="col-sm-12">
+                                <label for="tahun_kematian_a" class="form-label"><b>Person A:</b> Year of Death</label>
+                                <input type="number" class="form-control" value="{{$key->tahun_kematian_a}}" id="tahun_kematian_a" name="tahun_kematian_a" required>
+                              </div>
+                              <div class="col-sm-12">
+                                  <label for="usia_kematian_b" class="form-label"><b>Person B:</b> Age of death </label>
+                                  <input type="number" class="form-control" value="{{$key->usia_kematian_b}}" id="usia_kematian_b" name="usia_kematian_b" required>
+                                </div>
+                                <div class="col-sm-12">
+                                  <label for="tahun_kematian_b" class="form-label"><b>Person B:</b> Year of Death</label>
+                                  <input type="number" class="form-control" value="{{$key->tahun_kematian_b}}" id="tahun_kematian_b" name="tahun_kematian_b" required>
+                                </div>
+                          
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update changes</button>
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+
+                    @endforeach
+
                 </div>
             </div>
           </div>

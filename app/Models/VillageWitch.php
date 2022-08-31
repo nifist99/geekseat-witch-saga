@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\Helper;
 
 class VillageWitch extends Model
 {
@@ -15,6 +16,7 @@ class VillageWitch extends Model
         'tahun_kematian_a',
         'usia_kematian_b',
         'tahun_kematian_b',
+        'result',
     ];
 
     public static function saveData($request){
@@ -23,6 +25,7 @@ class VillageWitch extends Model
             "tahun_kematian_a"  =>$request->tahun_kematian_a,
             "usia_kematian_b"   =>$request->usia_kematian_b,
             "tahun_kematian_b"  =>$request->tahun_kematian_b,
+            "result"            =>Helper::geometri($request->usia_kematian_a,$request->tahun_kematian_a,$request->usia_kematian_b,$request->tahun_kematian_b),
         ]);
 
         return $save;
@@ -34,6 +37,7 @@ class VillageWitch extends Model
             "tahun_kematian_a"  =>$request->tahun_kematian_a,
             "usia_kematian_b"   =>$request->usia_kematian_b,
             "tahun_kematian_b"  =>$request->tahun_kematian_b,
+            "result"            =>Helper::geometri($request->usia_kematian_a,$request->tahun_kematian_a,$request->usia_kematian_b,$request->tahun_kematian_b),
         ]);
 
         return $update;

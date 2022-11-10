@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/','ExcelController@index');
 Route::post('import','ExcelController@import');
+Route::get('delete','ExcelController@delete');

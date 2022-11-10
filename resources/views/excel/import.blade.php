@@ -192,7 +192,10 @@
 
           <div class="container mt-20">
             <div class="row">
-                <div class="col-sm-12">
+                <div>
+                    <a href="{{url('delete')}}" class="btn btn-danger">delete all data</a>
+                </div>
+                <div class="col-sm-12 mt-20">
                     <table class="table table-bordered">
                         <thead>
                           <tr>

@@ -17,6 +17,13 @@ class ExcelController extends Controller
         return view('excel.import',$data);
     }
 
+    public function delete(){
+        
+        $check = Flight::truncate();
+
+        return redirect()->back()->with('message', 'success delete all data !')->with('message_type','primary');
+    }
+
     public function import(Request $request) 
     {
         $request->validate([

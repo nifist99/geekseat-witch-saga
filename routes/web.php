@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/','VillageWitchController@index');
-Route::post('save','VillageWitchController@store');
-Route::post('update','VillageWitchController@update');
-Route::get('delete/{id}','VillageWitchController@destroy');
+// Route::get('/','VillageWitchController@index');
+// Route::post('save','VillageWitchController@store');
+// Route::post('update','VillageWitchController@update');
+// Route::get('delete/{id}','VillageWitchController@destroy');
+
+Route::get('/','ExcelController@index');
+Route::post('import','ExcelController@import');

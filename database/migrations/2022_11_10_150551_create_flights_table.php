@@ -15,7 +15,7 @@ class CreateFlightsTable extends Migration
     {
         Schema::create('flights', function (Blueprint $table) {
             $table->uuid('id');
-            $table->string('package_id');
+            $table->string('package_id')->unique();
             $table->string('org');
             $table->string('dst');
             $table->string('owner');

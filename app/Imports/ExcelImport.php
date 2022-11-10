@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class ExcelImport implements ToModel,WithHeadingRow,WithUpserts,WithBatchInserts
+class ExcelImport implements ToModel,WithHeadingRow,WithUpserts,WithBatchInserts,WithUpsertColumns
 {
     /**
     * @param array $row
@@ -38,5 +38,10 @@ class ExcelImport implements ToModel,WithHeadingRow,WithUpserts,WithBatchInserts
     public function uniqueBy()
     {
         return 'package_id';
+    }
+
+    public function upsertColumns()
+    {
+        return ['package_id'];
     }
 }
